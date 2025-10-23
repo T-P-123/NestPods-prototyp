@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NestPods | Kempingové vestavby a příslušenství</title>
+    <style>
+        :root {
+            --primary-color: #0F2C30; /* tmavě zeleno-modrá */
+            --secondary-color: #1E3D40; /* o něco světlejší odstín primární barvy */
+            --accent-color: #F9A826; /* jantarová/oranžová - připomíná oheň, západ slunce */
+            --accent-color-dark: #D48A12; /* tmavší odstín akcentní barvy */
+            --bg-dark: #0A1A1D; /* velmi tmavé pozadí */
+            --bg-medium: #162A2D; /* středně tmavé pozadí */
+            --bg-light: #203739; /* světlejší tmavé pozadí */
+            --text-light: #F2F2F2; /* světlý text */
+            --text-muted: #A9B4B6; /* tlumený světlý text */
+            --card-bg: #182E32; /* pozadí karet */
+            --border-color: #2C4A4E; /* barva ohraničení */
+            --spacing: 20px;
+            --border-radius: 8px;
+            --transition: all 0.3s ease;
+            --box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+        
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        ul {
+            list-style: none;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background-color: var(--bg-dark);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .left-nav {
+            display: flex;
+            align-items: center;
+            flex: 1;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-light);
+            margin-right: 40px;
+            white-space: nowrap;
+        }
+        
+        .logo span {
+            color: var(--accent-color);
+        }
+
+        .main-nav {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+        }
+
+        .main-nav ul {
+            display: flex;
+            align-items: center;
+        }
+
+        .main-nav ul li {
+            margin-right: 25px;
+            position: relative;
+        }
+
+        .main-nav ul li:last-child {
+            margin-right: 0;
+        }
+        
+        .main-nav ul li a {
+            color: var(--text-light);
+            font-weight: 500;
+            position: relative;
+            transition: var(--transition);
+            padding: 5px 0;
+        }
+        
+        .main-nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--accent-color);
+            transition: var(--transition);
+        }
+        
+        .main-nav ul li a:hover {
+            color: var(--accent-color);
+        }
+        
+        .main-nav ul li a:hover::after {
+            width: 100%;
+        }
+
+        /* Right Icons */
+        .right-icons {
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+        }
+
+        .icon-btn {
+            position: relative;
+            margin-left: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--text-light);
+        }
+
+        .icon-btn:hover {
+            color: var(--accent-color);
+        }
+
+        /* Search Icon */
+        .search-icon {
+            position: relative;
+        }
+        
+        .search-icon a {
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            padding: 5px;
+        }
+        
+        /* Language Icon */
+        .language-icon {
+            position: relative;
+        }
+        
+        .language-icon a {
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            padding: 5px;
+        }
+
+        .language-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: var(--bg-light);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            min-width: 120px;
+            display: none;
+            z-index: 1001;
+        }
+
+        .language-dropdown.active {
+            display: block;
+        }
+
+        .language-option {
+            padding: 8px 10px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: block;
+            text-align: left;
+            border-radius: 4px;
+        }
+
+        .language-option:not(:last-child) {
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .language-option:hover {
+            background-color: var(--bg-medium);
+            color: var(--accent-color);
+        }
+
+        .language-option.active {
+            color: var(--accent-color);
+            font-weight: 600;
+        }
+        
+        /* Cart Icon */
+        .cart-icon {
+            position: relative;
+        }
+        
+        .cart-icon a {
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            padding: 5px;
+        }
+        
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: var(--accent-color);
+            color: var(--bg-dark);
+            font-size: 0.7rem;
+            font-weight: 700;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .mobile-toggle {
+            display: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: var(--text-light);
+        }
+
+        /* Icons SVG */
+        .icon-svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+        
+        /* Hero Section - s lépe viditelnou fotografií */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            background: linear-gradient(180deg, rgba(10, 26, 29, 0.55) 0%, rgba(10, 26, 29, 0.85) 100%),
+                       url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=2100&q=80');
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: var(--text-light);
+            padding-top: 60px;
+        }
+        
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8); /* Zvýšený stín pro lepší čitelnost */
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: var(--text-light);
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: var(--accent-color);
+            color: var(--bg-dark);
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 15px rgba(249, 168, 38, 0.3);
+        }
+        
+        .btn:hover {
+            background-color: var(--accent-color-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(249, 168, 38, 0.4);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--accent-color);
+            color: var(--accent-color);
+            box-shadow: none;
+            margin-left: 10px;
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--accent-color);
+            color: var(--bg-dark);
+            box-shadow: 0 8px 20px rgba(249, 168, 38, 0.4);
+        }
+        
+        /* Main Sections Navigation */
+        .main-sections {
+            background-color: var(--bg-medium);
+            padding: 30px 0;
+            margin-top: -20px;
+            box-shadow: var(--box-shadow);
+            position: relative;
+            z-index: 10;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .sections-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+        }
+        
+        .section-card {
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            position: relative;
+            height: 250px;
+            transition: var(--transition);
+            box-shadow: var(--box-shadow);
+            border: 1px solid var(--border-color);
+        }
+        
+        .section-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+            border-color: var(--accent-color);
+        }
+        
+        .section-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+        
+        .section-card:hover img {
+            transform: scale(1.05);
+        }
+        
+        .section-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(10, 26, 29, 0.5), rgba(10, 26, 29, 0.85));
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-light);
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .section-title {
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+        }
+        
+        .section-description {
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            color: var(--text-muted);
+        }
+        
+        /* Product Categories */
+        .product-categories {
+            padding: 80px 0;
+            background-color: var(--bg-dark);
+        }
+        
+        .section-heading {
+            text-align: center;
+            margin-bottom: 50px;
+            font-size: 2.5rem;
+            color: var(--text-light);
+            position: relative;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .section-heading::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: var(--accent-color);
+        }
+        
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+        
+        .category-card {
+            position: relative;
+            height: 400px;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+            border: 1px solid var(--border-color);
+        }
+        
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+            border-color: var(--accent-color);
+        }
+        
+        .category-img {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+        
+        .category-card:hover .category-img {
+            transform: scale(1.05);
+        }
+        
+        .category-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 30px 20px;
+            background: linear-gradient(transparent, rgba(10, 26, 29, 0.9));
+            color: var(--text-light);
+        }
+        
+        .category-title {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+        }
+        
+        .category-price {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: var(--accent-color);
+        }
+        
+        /* Configurator Preview */
+        .configurator-preview {
+            padding: 80px 0;
+            background-color: var(--bg-medium);
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .configurator-image {
+            max-width: 90%;
+            height: auto;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            margin-bottom: 30px;
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+        }
+        
+        .configurator-image:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+            border-color: var(--accent-color);
+        }
+        
+        /* Shop section */
+        .shop-section {
+            padding: 80px 0;
+            background-color: var(--bg-dark);
+        }
+        
+        .shop-header {
+            margin-bottom: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .shop-title {
+            font-size: 2.5rem;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+        
+        .shop-filters {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        
+        .filter-btn {
+            padding: 8px 15px;
+            background-color: var(--bg-light);
+            color: var(--text-light);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .filter-btn:hover, .filter-btn.active {
+            background-color: var(--accent-color);
+            color: var(--bg-dark);
+            border-color: var(--accent-color);
+        }
+        
+        .shop-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 30px;
+        }
+        
+        .product-card {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+            border: 1px solid var(--border-color);
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+            border-color: var(--accent-color);
+        }
+        
+        .product-img-container {
+            height: 200px;
+            overflow: hidden;
+        }
+        
+        .product-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+        
+        .product-card:hover .product-img {
+            transform: scale(1.05);
+        }
+        
+        .product-details {
+            padding: 20px;
+        }
+        
+        .product-title {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: var(--text-light);
+        }
+        
+        .product-price {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            margin-bottom: 20px;
+        }
+        
+        .product-actions {
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .add-to-cart {
+            padding: 8px 15px;
+            background-color: var(--accent-color);
+            color: var(--bg-dark);
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 600;
+        }
+        
+        .add-to-cart:hover {
+            background-color: var(--accent-color-dark);
+        }
+        
+        .view-details {
+            padding: 8px 15px;
+            background-color: transparent;
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .view-details:hover {
+            background-color: var(--accent-color);
+            color: var(--bg-dark);
+        }
+        
+        .view-all {
+            display: block;
+            text-align: center;
+            margin-top: 50px;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            padding: 70px 0 20px;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-column h3 {
+            font-size: 1.3rem;
+            margin-bottom: 25px;
+            position: relative;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background-color: var(--accent-color);
+        }
+        
+        .footer-column p {
+            color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+        
+        .footer-column ul li {
+            margin-bottom: 12px;
+        }
+        
+        .footer-column ul li a {
+            color: var(--text-muted);
+            transition: var(--transition);
+        }
+        
+        .footer-column ul li a:hover {
+            color: var(--accent-color);
+            padding-left: 5px;
+        }
+        
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--bg-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            border: 1px solid var(--border-color);
+        }
+        
+        .social-icon:hover {
+            background-color: var(--accent-color);
+            color: var(--bg-dark);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        
+        /* Mobile menu container */
+        .mobile-menu-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(10, 26, 29, 0.9);
+            z-index: 1001;
+            display: none;
+            overflow-y: auto;
+        }
+
+        .mobile-menu-container.active {
+            display: block;
+        }
+
+        .mobile-menu {
+            padding: 80px 20px 40px;
+        }
+
+        .mobile-menu-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: var(--text-light);
+            transition: var(--transition);
+        }
+
+        .mobile-menu-close:hover {
+            color: var(--accent-color);
+        }
+
+        .mobile-nav-item {
+            margin-bottom: 25px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+
+        .mobile-nav-item a {
+            font-size: 1.3rem;
+            color: var(--text-light);
+            transition: var(--transition);
+            display: block;
+            padding: 10px 0;
+        }
+
+        .mobile-nav-item a:hover {
+            color: var(--accent-color);
+            padding-left: 10px;
+        }
+
+        .mobile-icons {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .mobile-icon-btn {
+            position: relative;
+            font-size: 1.5rem;
+            color: var(--text-light);
+            transition: var(--transition);
+        }
+
+        .mobile-icon-btn:hover {
+            color: var(--accent-color);
+        }
+
+        .mobile-cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: var(--accent-color);
+            color: var(--bg-dark);
+            font-size: 0.7rem;
+            font-weight: 700;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mobile-languages {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 40px;
+        }
+
+        .mobile-lang-option {
+            padding: 8px 15px;
+            background-color: var(--bg-light);
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+        }
+
+        .mobile-lang-option.active {
+            background-color: var(--accent-color);
+            color: var(--bg-dark);
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .logo {
+                margin-right: 20px;
+            }
+            
+            .main-nav ul li {
+                margin-right: 15px;
+            }
+            
+            .icon-btn {
+                margin-left: 15px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .mobile-toggle {
+                display: block;
+            }
+            
+            .main-nav, .right-icons {
+                display: none;
+            }
+            
+            .sections-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .shop-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <div class="left-nav">
+                <a href="#" class="logo">Nest<span>Pods</span></a>
+                <nav class="main-nav">
+                    <ul>
+                        <li><a href="#">Vestavby</a></li>
+                        <li><a href="#">Příslušenství</a></li>
+                        <li><a href="#">O nás</a></li>
+                        <li><a href="#">Kontakt</a></li>
+                        <li><a href="#">Blog</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="right-icons">
+                <div class="icon-btn search-icon">
+                    <a href="#">
+                        <svg class="icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                        </svg>
+                    </a>
+                </div>
+                <div class="icon-btn language-icon" id="language-toggle">
+                    <a href="#">
+                        <svg class="icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                        </svg>
+                    </a>
+                    <div class="language-dropdown" id="language-dropdown">
+                        <a href="#" class="language-option active">Čeština</a>
+                        <a href="#" class="language-option">English</a>
+                        <a href="#" class="language-option">Deutsch</a>
+                    </div>
+                </div>
+                <div class="icon-btn cart-icon">
+                    <a href="#">
+                        <svg class="icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
+                        </svg>
+                        <span class="cart-count">3</span>
+                    </a>
+                </div>
+            </div>
+            <div class="mobile-toggle">☰</div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu-container" id="mobile-menu">
+        <div class="mobile-menu-close">✕</div>
+        <div class="mobile-menu">
+            <div class="mobile-nav-item">
+                <a href="#">Vestavby</a>
+            </div>
+            <div class="mobile-nav-item">
+                <a href="#">Příslušenství</a>
+            </div>
+            <div class="mobile-nav-item">
+                <a href="#">O nás</a>
+            </div>
+            <div class="mobile-nav-item">
+                <a href="#">Kontakt</a>
+            </div>
+            <div class="mobile-nav-item">
+                <a href="#">Blog</a>
+            </div>
+            <div class="mobile-icons">
+                <a href="#" class="mobile-icon-btn">
+                    <svg class="icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                        <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" fill="currentColor"/>
+                    </svg>
+                </a>
+                <a href="#" class="mobile-icon-btn">
+                    <svg class="icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" fill="currentColor"/>
+                    </svg>
+                </a>
+                <a href="#" class="mobile-icon-btn">
+                    <svg class="icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                        <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z" fill="currentColor"/>
+                    </svg>
+                    <span class="mobile-cart-count">3</span>
+                </a>
+            </div>
+            <div class="mobile-languages">
+                <a href="#" class="mobile-lang-option active">CZ</a>
+                <a href="#" class="mobile-lang-option">EN</a>
+                <a href="#" class="mobile-lang-option">DE</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Svoboda cestovat kamkoliv a kdykoliv</h1>
+            <p>Modulární kempingové vestavby do všech typů aut, které kombinují prémiovou kvalitu, chytré řešení a dostupnou cenu.</p>
+            <a href="#" class="btn">Nakonfigurovat vestavbu</a>
+            <a href="#" class="btn btn-outline">Prohlédnout příslušenství</a>
+        </div>
+    </section>
+
+    <!-- Main Sections Navigation -->
+    <section class="main-sections">
+        <div class="container">
+            <div class="sections-grid">
+                <a href="#" class="section-card">
+                    <img src="https://images.unsplash.com/photo-1520608760-eff2c38c6472?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Vestavby">
+                    <div class="section-overlay">
+                        <h2 class="section-title">Kempingové vestavby</h2>
+                        <p class="section-description">Modulární systémy do všech typů aut</p>
+                        <span class="btn">Prozkoumat</span>
+                    </div>
+                </a>
+                <a href="#" class="section-card">
+                    <img src="https://images.unsplash.com/photo-1504851149312-7a075b496cc7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Příslušenství">
+                    <div class="section-overlay">
+                        <h2 class="section-title">Kempingové příslušenství</h2>
+                        <p class="section-description">Vše pro vaše kempingové dobrodružství</p>
+                        <span class="btn">Nakupovat</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Categories (Vestavby) -->
+    <section class="product-categories">
+        <div class="container">
+            <h2 class="section-heading">Naše vestavby</h2>
+            <div class="category-grid">
+                <div class="category-card">
+                    <img src="https://images.unsplash.com/photo-1520608760-eff2c38c6472?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Vestavba do dodávek" class="category-img">
+                    <div class="category-overlay">
+                        <h3 class="category-title">Vestavby do dodávek</h3>
+                        <p class="category-price">Od 45 000 Kč</p>
+                        <a href="#" class="btn">Prozkoumat</a>
+                    </div>
+                </div>
+                <div class="category-card">
+                    <img src="https://images.unsplash.com/photo-1594495894542-a46cc73e081a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2071&q=80" alt="Vestavba do osobních aut" class="category-img">
+                    <div class="category-overlay">
+                        <h3 class="category-title">Vestavby do osobních aut</h3>
+                        <p class="category-price">Od 25 000 Kč</p>
+                        <a href="#" class="btn">Prozkoumat</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Configurator Preview -->
+    <section class="configurator-preview">
+        <div class="container">
+            <h2 class="section-heading">Navrhněte si vlastní vestavbu</h2>
+            <p>Náš interaktivní konfigurátor vám umožní vytvořit vestavbu přesně podle vašich představ a potřeb.</p>
+            <img src="https://i.ibb.co/JCxZTMF/configurator-preview.jpg" alt="Ukázka konfigurátoru" class="configurator-image">
+            <a href="#" class="btn">Vyzkoušet konfigurátor</a>
+        </div>
+    </section>
+
+    <!-- E-shop Section -->
+    <section class="shop-section">
+        <div class="container">
+            <div class="shop-header">
+                <h2 class="shop-title">Příslušenství</h2>
+                <div class="shop-filters">
+                    <button class="filter-btn active">Vše</button>
+                    <button class="filter-btn">Elektronika</button>
+                    <button class="filter-btn">Kempingové vybavení</button>
+                    <button class="filter-btn">Střešní stany</button>
+                </div>
+            </div>
+            <div class="shop-grid">
+                <!-- Product 1 -->
+                <div class="product-card">
+                    <div class="product-img-container">
+                        <img src="https://images.unsplash.com/photo-1621746674297-a82dba66cd8e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Autochladnička" class="product-img">
+                    </div>
+                    <div class="product-details">
+                        <h3 class="product-title">Autochladnička 25L</h3>
+                        <p class="product-price">6 990 Kč</p>
+                        <div class="product-actions">
+                            <a href="#" class="view-details">Detail</a>
+                            <a href="#" class="add-to-cart">Do košíku</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 2 -->
+                <div class="product-card">
+                    <div class="product-img-container">
+                        <img src="https://images.unsplash.com/photo-1531845116688-48819b3b68d9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1671&q=80" alt="Střešní stan" class="product-img">
+                    </div>
+                    <div class="product-details">
+                        <h3 class="product-title">Střešní stan Premium</h3>
+                        <p class="product-price">25 990 Kč</p>
+                        <div class="product-actions">
+                            <a href="#" class="view-details">Detail</a>
+                            <a href="#" class="add-to-cart">Do košíku</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 3 -->
+                <div class="product-card">
+                    <div class="product-img-container">
+                        <img src="https://images.unsplash.com/photo-1515169067868-5387ec356754?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Solární panel" class="product-img">
+                    </div>
+                    <div class="product-details">
+                        <h3 class="product-title">Přenosný solární panel 120W</h3>
+                        <p class="product-price">5 490 Kč</p>
+                        <div class="product-actions">
+                            <a href="#" class="view-details">Detail</a>
+                            <a href="#" class="add-to-cart">Do košíku</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 4 -->
+                <div class="product-card">
+                    <div class="product-img-container">
+                        <img src="https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Kempingový vařič" class="product-img">
+                    </div>
+                    <div class="product-details">
+                        <h3 class="product-title">Přenosný kempingový vařič</h3>
+                        <p class="product-price">1 290 Kč</p>
+                        <div class="product-actions">
+                            <a href="#" class="view-details">Detail</a>
+                            <a href="#" class="add-to-cart">Do košíku</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <a href="#" class="btn view-all">Zobrazit všechny produkty</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h3>NestPods</h3>
+                    <p>Modulární kempingové vestavby do aut, které kombinují prémiovou kvalitu, chytré řešení a dostupnou cenu.</p>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon">FB</a>
+                        <a href="#" class="social-icon">IG</a>
+                        <a href="#" class="social-icon">YT</a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Vestavby</h3>
+                    <ul>
+                        <li><a href="#">Vestavby do dodávek</a></li>
+                        <li><a href="#">Vestavby do osobních aut</a></li>
+                        <li><a href="#">Konfigurátor</a></li>
+                        <li><a href="#">Galerie realizací</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Příslušenství</h3>
+                    <ul>
+                        <li><a href="#">Elektronika</a></li>
+                        <li><a href="#">Kempingové vybavení</a></li>
+                        <li><a href="#">Střešní stany</a></li>
+                        <li><a href="#">Novinky</a></li>
+                        <li><a href="#">Akční nabídky</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Kontakt</h3>
+                    <ul>
+                        <li>info@nestpods.cz</li>
+                        <li>+420 123 456 789</li>
+                        <li>Ulice 123, 123 45 Město</li>
+                        <li>IČ: 12345678</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>© 2025 NestPods. Všechna práva vyhrazena.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileToggle = document.querySelector('.mobile-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileMenuClose = document.querySelector('.mobile-menu-close');
+        
+        mobileToggle.addEventListener('click', () => {
+            mobileMenu.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+        
+        mobileMenuClose.addEventListener('click', () => {
+            mobileMenu.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        });
+        
+        // Language dropdown
+        const languageToggle = document.getElementById('language-toggle');
+        const languageDropdown = document.getElementById('language-dropdown');
+        
+        languageToggle.addEventListener('click', (e) => {
+            e.preventDefault();
+            languageDropdown.classList.toggle('active');
+        });
+        
+        document.addEventListener('click', (e) => {
+            if (!languageToggle.contains(e.target) && !languageDropdown.contains(e.target)) {
+                languageDropdown.classList.remove('active');
+            }
+        });
+        
+        // Language selection
+        const languageOptions = document.querySelectorAll('.language-option');
+        
+        languageOptions.forEach(option => {
+            option.addEventListener('click', (e) => {
+                e.preventDefault();
+                languageOptions.forEach(opt => opt.classList.remove('active'));
+                option.classList.add('active');
+                languageDropdown.classList.remove('active');
+            });
+        });
+        
+        // Mobile language selection
+        const mobileLangOptions = document.querySelectorAll('.mobile-lang-option');
+        
+        mobileLangOptions.forEach(option => {
+            option.addEventListener('click', (e) => {
+                e.preventDefault();
+                mobileLangOptions.forEach(opt => opt.classList.remove('active'));
+                option.classList.add('active');
+            });
+        });
+        
+        // Shop filters
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
